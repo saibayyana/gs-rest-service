@@ -21,7 +21,7 @@ steps:
   displayName: 'Build and Push Docker Image'
   inputs:
     containerRegistry: 'docker'
-    repository: 'saibayyana/gs-rest-service'
+    repository: 'leelasai196/gs-rest-service'
     command: 'buildAndPush'
     Dockerfile: 'complete/Dockerfile'  # <<<<<<--- FIXED LINE
     tags: |

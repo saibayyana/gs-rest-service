@@ -32,7 +32,7 @@ steps:
 # Step 2: Trivy Scan and save results
 - script: |
     curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
-    trivy image -f table -o $(Build.ArtifactStagingDirectory)/trivy-report.txt leelasai196/gs-rest-service:$(tag)
+    trivy image leelasai196/gs-rest-service:$(tag) > $(Build.ArtifactStagingDirectory)/trivy-report.txt
   displayName: 'Scan Docker Image with Trivy'
 
 # Step 3: Publish Trivy Scan Result

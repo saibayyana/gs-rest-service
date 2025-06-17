@@ -31,7 +31,7 @@ steps:
 # Step 2: Trivy Scan
 - script: |
     curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
-    ./trivy image leelasai196/gs-rest-service:$(tag)
+    trivy image leelasai196/gs-rest-service:$(tag)
   displayName: 'Scan Docker Image with Trivy'
 
 # Step 3: Push Docker Image if Trivy scan is clean

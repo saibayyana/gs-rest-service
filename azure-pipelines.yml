@@ -27,6 +27,7 @@ steps:
     Dockerfile: 'complete/Dockerfile'
     tags: |
       $(tag)
+      latest
 
 # Step 2: Trivy Scan
 - script: |

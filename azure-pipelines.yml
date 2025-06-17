@@ -10,20 +10,37 @@ pool:
 steps:
 - task: Maven@3
   inputs:
-    mavenPomFile: 'complete/pom.xml'   # <<<<<<--- FIXED LINE
+    mavenPomFile: 'complete/pom.xml'
     goals: 'clean package'
     javaHomeOption: 'JDKVersion'
     jdkVersionOption: '17'
     mavenVersionOption: 'Default'
-    workingDirectory: 'complete'       # Optional, if needed
+    workingDirectory: 'complete'
 
+# Step 1: Build Docker image (only build, not push)
 - task: Docker@2
-  displayName: 'Build and Push Docker Image'
+  displayName: 'Build Docker Image'
   inputs:
     containerRegistry: 'docker'
     repository: 'leelasai196/gs-rest-service'
-    command: 'buildAndPush'
-    Dockerfile: 'complete/Dockerfile'  # <<<<<<--- FIXED LINE
+    command: 'build'
+    Dockerfile: 'complete/Dockerfile'
     tags: |
-      latest
       $(tag)
+
+# Step 2: Trivy Scan
+- script: |
+    curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
+    ./trivy image leelasai196/gs-rest-service:$(tag)
+  displayName: 'Scan Docker Image with Trivy'
+
+# Step 3: Push Docker Image if Trivy scan is clean
+- task: Docker@2
+  displayName: 'Push Docker Image'
+  inputs:
+    containerRegistry: 'docker'
+    repository: 'leelasai196/gs-rest-service'
+    command: 'push'
+    tags: |
+      $(tag)
+      latest
